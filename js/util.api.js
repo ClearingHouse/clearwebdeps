@@ -178,17 +178,17 @@ function _makeJSONAPICall(destType, endpoints, method, params, timeout, onSucces
   assert(httpMethod == "POST" || httpMethod == "GET", "Invalid HTTP method");
   
   //make JSON API call to counterblockd
-  if(destType == "counterblockd") {
+  if(destType == "clearblockd") {
     makeJSONRPCCall(endpoints, method, params, timeout, onSuccess, onError);
-  } else if(destType == "counterpartyd") {
+  } else if(destType == "clearinghoused") {
     //make JSON API call to counterblockd, which will proxy it to counterpartyd
-    makeJSONRPCCall(endpoints, "proxy_to_counterpartyd", {"method": method, "params": params }, timeout, onSuccess, onError);
+    makeJSONRPCCall(endpoints, "proxy_to_clearinghoused", {"method": method, "params": params }, timeout, onSuccess, onError);
   }
 }
 
 function _getDestTypeFromMethod(method) {
   //based on the method, determine the endpoints list to use
-  var destType = "counterpartyd";
+  var destType = "clearinghoused";
   if(['is_ready', 'get_reflected_host_info', 'is_chat_handle_in_use',
       'get_messagefeed_messages_by_index', 'get_normalized_balances', 'get_required_btcpays',
       'get_chain_address_info', 'get_chain_block_height', 'get_chain_txns_status',
@@ -202,13 +202,13 @@ function _getDestTypeFromMethod(method) {
       'get_users_pairs', 'get_market_orders', 'get_market_trades', 'get_markets_list', 'get_market_details',
       'get_pubkey_for_address', 'create_armory_utx', 'convert_armory_signedtx_to_raw_hex', 'create_support_case',
       'get_escrowed_balances', 'proxy_to_autobtcescrow', 'get_vennd_machine'].indexOf(method) >= 0) {
-    destType = "counterblockd";
+    destType = "clearblockd";
   }
   return destType;
 }
 
 function supportUnconfirmedChangeParam(method) {
-  return method.split("_").shift()=="create" && _getDestTypeFromMethod(method)=="counterpartyd";
+  return method.split("_").shift()=="create" && _getDestTypeFromMethod(method)=="clearinghoused";
 }
 
 function _multiAPIPrimative(method, params, onFinished) {
@@ -354,13 +354,13 @@ function multiAPIConsensus(method, params, onSuccess, onConsensusError, onSysErr
     onSysError = function(jqXHR, textStatus, errorThrown, endpoint) {
       $.jqlog.debug(textStatus);
       var message = textStatus;
-      var noBtcPos = textStatus.indexOf("Insufficient bitcoins");
+      var noBtcPos = textStatus.indexOf("Insufficient viacoins");
       if (noBtcPos != -1) {
         var endMessage = textStatus.indexOf(")", noBtcPos) + 1;
 
         message = '<b class="errorColor">' + textStatus.substr(noBtcPos, endMessage-noBtcPos)
-          + '</b>. You must have a small amount of BTC in this address to pay the Bitcoin miner fees. Please fund this address and try again.<br/><br/>'
-          + '<a href="https://www.counterparty.co/resources/faqs/why-do-i-need-small-amounts-of-bitcoin-to-do-things-in-counterwallet/" target="_blank">More information on why this is necessary.</a>';
+          + '</b>. You must have a small amount of VIA in this address to pay the Viacoin miner fees. Please fund this address and try again.<br/><br/>'
+          + '<a href="https://www.clearinghouse.io/resources/faqs/why-do-i-need-small-amounts-of-bitcoin-to-do-things-in-counterwallet/" target="_blank">More information on why this is necessary.</a>';
       
       } else {
         message = describeError(jqXHR, textStatus, errorThrown);

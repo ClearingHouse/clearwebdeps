@@ -95,7 +95,7 @@ ko.validation.rules['isValidBitcoinAddress'] = {
     validator: function (val, self) {
         return CWBitcore.isValidAddress(val);
     },
-    message: USE_TESTNET ? 'This field must be a valid TESTNET Bitcoin address.' : 'This field must be a valid Bitcoin address.'
+    message: USE_TESTNET ? 'This field must be a valid TESTNET Viacoin address.' : 'This field must be a valid Viacoin address.'
 };
 
 ko.validation.rules['isValidBitcoinAddressIfSpecified'] = {
@@ -107,7 +107,7 @@ ko.validation.rules['isValidBitcoinAddressIfSpecified'] = {
           return false;
         }
     },
-    message: USE_TESTNET ? 'This field must be a valid TESTNET Bitcoin address.' : 'This field must be a valid Bitcoin address.'
+    message: USE_TESTNET ? 'This field must be a valid TESTNET Viacoin address.' : 'This field must be a valid Viacoin address.'
 };
 
 ko.validation.rules['isValidQtyForDivisibility'] = {
@@ -172,7 +172,7 @@ ko.validation.rules['isValidUrlOrValidBitcoinAdressOrJsonBet'] = {
         return CWBitcore.isValidAddress(val);
       }   
     },
-    message: 'This field must be a valid url or a valid Bitcoin address'
+    message: 'This field must be a valid url or a valid Viacoin address'
 };
 
 ko.validation.registerExtenders();
