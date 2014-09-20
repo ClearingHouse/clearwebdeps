@@ -325,3 +325,10 @@ function doubleHash(hexstr) {
     return c;
   };
 })();
+
+function truncate(str, length){
+  if(length == undefined){
+    length = 16
+  }
+  return str.substring(0,length) + "..."
+}
